@@ -59,15 +59,7 @@ block_choice = None
 while block_choice is None:
     print('')
     block_choice = input('Enter user ID: ')
-    try:
-        block_choice = int(block_choice)
-    except ValueError:
-        print('Error! Unrecognized option.')
-        continue
     # Decimal value not greater than hex number with 6 digits
-    if not (0 <= block_choice < 16777215):
-        print('Error! User ID must be within 0 to 4294967295.')
-        continue
     print('')
 print('You chose the block type: {0}'.format(block_choice))
 print('')
@@ -76,10 +68,10 @@ print('')
 print('== STEP 3 =========================')
 print('Confirm you are ready to write to the card:')
 print('User ID: {0}'.format(block_choice))
-#choice = input('Confirm card write (Y or N)? ')
-#if choice.lower() != 'y' and choice.lower() != 'yes':
-#    print('Aborted!')
-#    sys.exit(0)
+choice = input('Confirm card write (Y or N)? ')
+if choice.lower() != 'y' and choice.lower() != 'yes':
+    print('Aborted!')
+    sys.exit(0)
 print('Writing card (DO NOT REMOVE CARD FROM PN532)...')
 
 # Write the card!
@@ -96,10 +88,12 @@ data = bytearray(16)
 # Add header
 data[0:2] = HEADER
 # Convert int to hex string with up to 6 digits
-value = format(block_choice, 'x')
-while (6 > len(value)):
-    value = '0' + value
-data[2:8] = value
+#value = format(block_choice, 'x')
+value = block_choice.encode("hex")
+
+#while (6 > len(value)):
+ #   value = '0' + value
+#data[2:8] = value
 # Finally write the card.
 if not pn532.mifare_classic_write_block(4, data):
     print('Error! Failed to write to the card.')

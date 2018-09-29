@@ -64,6 +64,5 @@ while True:
         print('Card is not written with proper block data!')
         continue
     # Parse out the block type and subtype
-    print('User Id: {0}'.format(int(data[2:8].decode("utf-8"), 16)))
-    break
+    print('User Id: {0}'.format(data[2:8].decode("hex")))
     time.sleep(DELAY);
